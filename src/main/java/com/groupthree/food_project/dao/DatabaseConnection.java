@@ -22,7 +22,6 @@ public class DatabaseConnection {
         try {
             // Kết nối đến CSDL
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Kết nối MySQL thành công!");
         } catch (SQLException e) {
             System.err.println("Lỗi kết nối CSDL!");
             e.printStackTrace();
