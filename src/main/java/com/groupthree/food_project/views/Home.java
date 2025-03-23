@@ -175,8 +175,12 @@ public class Home extends javax.swing.JFrame {
         header.setBackground(new java.awt.Color(255, 255, 255));
 
         categoryBox.setBackground(new java.awt.Color(204, 204, 204));
-        categoryBox.setForeground(new java.awt.Color(51, 51, 51));
         categoryBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        categoryBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoryBoxActionPerformed(evt);
+            }
+        });
 
         categoryLabel.setText("Danh mục");
 
@@ -369,6 +373,10 @@ public class Home extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_accountBtnActionPerformed
+
+    private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoryBoxActionPerformed
 
     /**
      * @param args the command line arguments

@@ -16,6 +16,7 @@ com\groupthree\food_project\models\Order.class
 com\groupthree\food_project\dao\CartDAO.class
 com\groupthree\food_project\views\Login.class
 com\groupthree\food_project\dao\OrderDetailDAO.class
+com\groupthree\food_project\views\Home$4.class
 com\groupthree\food_project\views\Home$1.class
 com\groupthree\food_project\views\Register$2.class
 com\groupthree\food_project\views\Admin.class
