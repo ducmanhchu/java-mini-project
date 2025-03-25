@@ -29,6 +29,7 @@ public class ProductDAO {
                             rs.getString("name"),
                             rs.getString("description"),
                             rs.getDouble("price"),
+                            rs.getInt("stock"),
                             rs.getString("image"),
                             rs.getInt("category_id")
                     ));
