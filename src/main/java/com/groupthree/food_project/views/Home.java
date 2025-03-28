@@ -98,8 +98,18 @@ public class Home extends javax.swing.JFrame {
     private void setupTableSelectionListener() {
         productTable.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
             if (!event.getValueIsAdjusting() && productTable.getSelectedRow() != -1) {
-                int selectedIndex = productTable.getSelectedRow();
-                showProductDetails(productList.get(selectedIndex));
+                int selectedRow = productTable.getSelectedRow();
+            
+                // Lấy productId từ bảng
+                int productId = (int) productTable.getValueAt(selectedRow, 0);
+
+                // Tìm sản phẩm trong danh sách đã lọc
+                for (Product p : productList) {
+                    if (p.getProductId() == productId) {
+                        showProductDetails(p);
+                        break;
+                    }
+                }
             }
         });
     }
@@ -109,6 +119,7 @@ public class Home extends javax.swing.JFrame {
         nameLabel.setText(product.getName());
         priceLabel.setText("Giá: " + product.getPrice() + " VNĐ");
         descriptionLabel.setText("<html>" + product.getDescription() + "</html>"); // Hỗ trợ xuống dòng
+        stockTxt.setText("Trong kho: " + product.getStock());
 
         // Tải và hiển thị hình ảnh
         try {
@@ -167,6 +178,7 @@ public class Home extends javax.swing.JFrame {
         addToCartBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         amountTxt = new javax.swing.JTextField();
+        stockTxt = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -300,6 +312,9 @@ public class Home extends javax.swing.JFrame {
         amountTxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         amountTxt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
+        stockTxt.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
+        stockTxt.setText("Trong kho:");
+
         javax.swing.GroupLayout previewPanelLayout = new javax.swing.GroupLayout(previewPanel);
         previewPanel.setLayout(previewPanelLayout);
         previewPanelLayout.setHorizontalGroup(
@@ -311,14 +326,18 @@ public class Home extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout.createSequentialGroup()
                         .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(nameLabel, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(priceLabel, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(50, 50, 50)
                                 .addComponent(addToCartBtn))
-                            .addComponent(descriptionLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout.createSequentialGroup()
+                                    .addComponent(priceLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(stockTxt))
+                                .addComponent(descriptionLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(30, 30, 30))
         );
@@ -330,10 +349,12 @@ public class Home extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(nameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(priceLabel)
+                .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(priceLabel)
+                    .addComponent(stockTxt))
                 .addGap(18, 18, 18)
                 .addComponent(descriptionLabel)
-                .addGap(64, 64, 64)
+                .addGap(70, 70, 70)
                 .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addToCartBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
@@ -442,5 +463,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTable productTable;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchTxt;
+    private javax.swing.JLabel stockTxt;
     // End of variables declaration//GEN-END:variables
 }

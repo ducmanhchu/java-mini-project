@@ -13,9 +13,9 @@ public class Product {
     private String name;
     private String description;
     private double price;
+    private int stock;
     private String image;
     private int categoryId;
-    private int stock;
             
     public Product() {}
 
@@ -41,6 +41,9 @@ public class Product {
 
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
+    
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
 
     public String getImage() { return image; }
     public void setImage(String image) { this.image = image; }
@@ -48,6 +51,4 @@ public class Product {
     public int getCategoryId() { return categoryId; }
     public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
     
-    public int getStock() { return stock; }
-    public void setStock(int stock) { this.stock = stock; }
 }
