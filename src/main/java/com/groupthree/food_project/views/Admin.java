@@ -4,19 +4,57 @@
  */
 package com.groupthree.food_project.views;
 
+import com.groupthree.food_project.dao.CategoryDAO;
+import com.groupthree.food_project.dao.ProductDAO;
+import com.groupthree.food_project.models.Category;
+import com.groupthree.food_project.models.Product;
+import java.util.List;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author dell
  */
 public class Admin extends javax.swing.JFrame {
-
+    ProductDAO productDAO = new ProductDAO();
+    CategoryDAO categoryDAO = new CategoryDAO();
+    List<Product> products = productDAO.getAllProducts();
+    List<Category> categories = categoryDAO.getAllCategories();
     /**
      * Creates new form Admin
      */
     public Admin() {
         initComponents();
+        
+        initTableProductListener();
+        loadCategoryBox();
+        loadTableProduct();
     }
 
+    private void initTableProductListener(){
+        tableProduct.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = tableProduct.getSelectedRow(); // Lấy dòng được chọn
+                if (row >= 0) {
+                    int productId = (int) tableProduct.getValueAt(row, 1); // Lấy ID sản phẩm
+                    openProductDetails(productId);
+                }
+            }
+        });
+    }
+    
+    private void openProductDetails(int productId) {
+        Product selectedProduct = productDAO.getProductById(productId);
+        if (selectedProduct.getProductId() != -1) {
+            ProductDetails productDetails = new ProductDetails(selectedProduct);
+            productDetails.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+            productDetails.setVisible(true);
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,22 +64,207 @@ public class Admin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableProduct = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        btnAddProduct = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        categoryLabel = new javax.swing.JLabel();
+        categoryBox = new javax.swing.JComboBox<>();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tableProduct.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tableProduct.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sản phẩm", "ID", "Danh mục", "Kho", "Giá", "Trạng thái"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableProduct.setRowHeight(30);
+        tableProduct.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tableProduct);
+        if (tableProduct.getColumnModel().getColumnCount() > 0) {
+            tableProduct.getColumnModel().getColumn(0).setPreferredWidth(200);
+            tableProduct.getColumnModel().getColumn(1).setPreferredWidth(75);
+            tableProduct.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tableProduct.getColumnModel().getColumn(3).setPreferredWidth(75);
+            tableProduct.getColumnModel().getColumn(4).setPreferredWidth(150);
+            tableProduct.getColumnModel().getColumn(5).setPreferredWidth(120);
+        }
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
+        jLabel1.setText("Sản phẩm");
+
+        btnAddProduct.setBackground(new java.awt.Color(0, 51, 204));
+        btnAddProduct.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnAddProduct.setForeground(new java.awt.Color(255, 255, 255));
+        btnAddProduct.setText("Thêm sản phẩm");
+        btnAddProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddProductActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(0, 0, 0));
+        btnSearch.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
+        btnSearch.setText("Tìm Kiếm");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        categoryLabel.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        categoryLabel.setText("Danh mục");
+
+        categoryBox.setBackground(new java.awt.Color(204, 204, 204));
+        categoryBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        categoryBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoryBoxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 889, Short.MAX_VALUE)
+            .addComponent(jSeparator1)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(52, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(47, 47, 47))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 788, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(categoryLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnAddProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(49, 49, 49))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 536, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryLabel)
+                    .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAddProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed
+        // TODO add your handling code here:
+        loadTableProduct();
+    }//GEN-LAST:event_categoryBoxActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        loadTableProduct();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnAddProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddProductActionPerformed
+        // TODO add your handling code here:
+        AddProduct addProduct = new AddProduct();
+        addProduct.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addProduct.setVisible(true);
+    }//GEN-LAST:event_btnAddProductActionPerformed
+
+    //Lấy thông tin sản phẩm
+    public void loadTableProduct(){
+        String selectedCategory = (String) categoryBox.getSelectedItem(); // Lấy danh mục được chọn
+        String keySearch = txtSearch.getText().trim().toLowerCase(); // Lấy từ khóa tìm kiếm
+        
+        // Lấy DefaultTableModel từ Jtable
+        DefaultTableModel model = (DefaultTableModel) tableProduct.getModel();
+        // Xóa dữ liệu trong JTable nếu có
+        model.setRowCount(0);
+        
+        //Duyệt danh sachs sản phẩm và thêm vào table
+        for (Product product : products){
+            Category category = categoryDAO.getCategoryById(product.getCategoryId());
+            String categoryName = category.getCategoryName();
+            
+            // Lọc theo tên sản phẩm hoặc danh mục
+            boolean byCategory = "Tất cả sản phẩm".equals(selectedCategory) || categoryName.equals(selectedCategory);
+            boolean byKeySearch = keySearch.isEmpty() || product.getName().toLowerCase().contains(keySearch);
+            
+            String checkStock = "Còn hàng";
+            if(product.getStock() <= 0)
+                checkStock = "Hết hàng";
+                
+            
+            if (byCategory && byKeySearch) { 
+                model.addRow(new Object[]{"  " + product.getName(), product.getProductId(), categoryName, product.getStock(), product.getPrice() + " VNĐ", checkStock});
+            }
+        }
+        
+        // Tạo renderer để căn giữa nội dung
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        centerRenderer.setVerticalAlignment(SwingConstants.CENTER);
+        
+        //Áp dụng căn giữa cho tất cả các cột
+        for(int i = 1; i < tableProduct.getColumnCount(); i++){
+            tableProduct.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        
+    }
+
+    // Lấy thông tin về các danh mục
+    private void loadCategoryBox() {
+        categoryBox.removeAllItems(); // Xóa toàn bộ danh mục trong JComboBox trước khi thêm mới
+        categoryBox.addItem("Tất cả sản phẩm");
+        
+        //Thêm danh mục mới vào categoryBox
+        for (Category cate : categories) {
+            categoryBox.addItem(cate.getCategoryName()); 
+        }
+        categoryBox.setSelectedIndex(0); //Mặc định chọn tất cả sản phẩm
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -78,5 +301,14 @@ public class Admin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddProduct;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JComboBox<String> categoryBox;
+    private javax.swing.JLabel categoryLabel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTable tableProduct;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
