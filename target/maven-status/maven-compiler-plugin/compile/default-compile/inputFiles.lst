@@ -12,7 +12,14 @@ D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\models\Order
 D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\models\OrderDetail.java
 D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\models\Product.java
 D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\models\Users.java
+D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\AddCategory.java
+D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\AddProduct.java
 D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\Admin.java
+D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\CategoryDetails.java
+D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\CategoryManagement.java
 D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\Home.java
 D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\Login.java
+D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\OrderManagement.java
+D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\ProductDetails.java
 D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\Register.java
+D:\Java\java-mini-project\src\main\java\com\groupthree\food_project\views\UpdateStatus.java

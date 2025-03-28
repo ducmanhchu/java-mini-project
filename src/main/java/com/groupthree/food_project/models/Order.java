@@ -4,7 +4,7 @@
  */
 package com.groupthree.food_project.models;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -17,12 +17,12 @@ public class Order {
     private String phoneNumber;
     private String address;
     private double totalPrice;
-    private Date createdAt;
+    private Timestamp createdAt;
     private int userId;
 
     public Order() {}
 
-    public Order(int orderId, String status, String name, String phoneNumber, String address, double totalPrice, Date createdAt, int userId) {
+    public Order(int orderId, String status, String name, String phoneNumber, String address, double totalPrice, Timestamp createdAt, int userId) {
         this.orderId = orderId;
         this.status = status;
         this.name = name;
@@ -52,8 +52,8 @@ public class Order {
     public double getTotalPrice() { return totalPrice; }
     public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
 
-    public Date getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
 
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }

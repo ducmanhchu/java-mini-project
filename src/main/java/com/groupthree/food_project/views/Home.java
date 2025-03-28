@@ -188,6 +188,11 @@ public class Home extends javax.swing.JFrame {
         searchBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         searchBtn.setForeground(new java.awt.Color(255, 255, 255));
         searchBtn.setText("Tìm kiếm");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
 
         cartBtn.setBackground(new java.awt.Color(153, 204, 255));
         cartBtn.setText("Giỏ hàng");
@@ -321,7 +326,7 @@ public class Home extends javax.swing.JFrame {
             previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(previewPanelLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
+                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(nameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -377,6 +382,10 @@ public class Home extends javax.swing.JFrame {
     private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_categoryBoxActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchBtnActionPerformed
 
     /**
      * @param args the command line arguments
