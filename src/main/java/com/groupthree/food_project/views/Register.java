@@ -169,7 +169,7 @@ public class Register extends javax.swing.JFrame {
         if (usersDAO.registerUser(newUser)) {
             JOptionPane.showMessageDialog(this, "Đăng ký thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
             dispose(); // Đóng form đăng ký
-            new Login(new Home(), new Admin()).setVisible(true);
+            new Login(new Home(), new FoodManagement()).setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc số điện thoại đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -178,7 +178,7 @@ public class Register extends javax.swing.JFrame {
     private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnMouseClicked
         // TODO add your handling code here:
         this.dispose();
-        new Login(new Home(), new Admin()).setVisible(true);
+        new Login(new Home(), new FoodManagement()).setVisible(true);
     }//GEN-LAST:event_loginBtnMouseClicked
 
     /**

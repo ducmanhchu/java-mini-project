@@ -389,7 +389,7 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (UsersDAO.currentUser == null) {
             this.dispose();
-            new Login(this, new Admin()).setVisible(true);
+            new Login(this, new FoodManagement()).setVisible(true);
         } else {
             int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn đăng xuất?", "Xác nhận", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
