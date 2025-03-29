@@ -59,6 +59,18 @@ public class CartDAO {
         }
     }
     
+    // Cập nhật số lượng của một sản phẩm trong giỏ
+    public static void updateCartItem(int cartId, int quantity) {
+        String query = "UPDATE cart SET quantity = ? WHERE cart_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, quantity);
+            stmt.setInt(2, cartId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void addToCart(int userId, int productId, int quantity) {
         String sqlCheck = "SELECT cart_id, quantity FROM cart WHERE user_id = ? AND product_id = ?";

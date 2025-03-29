@@ -23,25 +23,18 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jSeparator1" alignment="0" pref="922" max="32767" attributes="0"/>
+          <Component id="jSeparator1" alignment="0" pref="944" max="32767" attributes="0"/>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
               <Component id="jLabel1" min="-2" pref="824" max="-2" attributes="0"/>
               <EmptySpace min="47" pref="47" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="btnAddCategory" min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" min="-2" pref="799" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="368" max="-2" attributes="0"/>
-                      <Component id="btnBack" min="-2" pref="182" max="-2" attributes="0"/>
-                  </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="btnBack" min="-2" pref="182" max="-2" attributes="0"/>
+                  <Component id="btnAddCategory" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" pref="799" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -60,7 +53,7 @@
               <Component id="jScrollPane1" min="-2" pref="394" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnBack" min="-2" pref="35" max="-2" attributes="0"/>
-              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <EmptySpace pref="35" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

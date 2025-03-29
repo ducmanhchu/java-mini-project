@@ -38,15 +38,15 @@ public class Home extends javax.swing.JFrame {
      */
 
     public Home() {
-        cartForm = new CartView();
+        cartForm = new CartView(this);
         if (UsersDAO.currentUser != null) {
             cartForm.loadCart(UsersDAO.currentUser.getUserId());
-            myOrderForm = new MyOrder();
+            myOrderForm = new MyOrder(this);
         }
         productDAO = new ProductDAO();
         categoryDAO = new CategoryDAO();
         initComponents();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); // Căn giữa màn hình khi khởi tạo
 
         // Mặc định khi chưa đăng nhập thì ẩn nút giỏ hàng và đơn hàng
         cartBtn.setVisible(false);
@@ -138,7 +138,7 @@ public class Home extends javax.swing.JFrame {
     // Hiển thị chi tiết sản phẩm
     private void showProductDetails(Product product) {
         nameLabel.setText(product.getName());
-        priceLabel.setText("Giá: " + product.getPrice() + " VNĐ");
+        priceLabel.setText("Giá: " + String.format("%,.0f", product.getPrice()) + " VNĐ");
         descriptionLabel.setText("<html>" + product.getDescription() + "</html>"); // Hỗ trợ xuống dòng
         stockTxt.setText("Trong kho: " + product.getStock());
 
@@ -205,7 +205,7 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
@@ -236,8 +236,7 @@ public class Home extends javax.swing.JFrame {
         header.setBackground(new java.awt.Color(255, 255, 255));
 
         categoryBox.setBackground(new java.awt.Color(204, 204, 204));
-        categoryBox.setForeground(new java.awt.Color(51, 51, 51));
-        categoryBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));        
+        categoryBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         categoryBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 categoryBoxActionPerformed(evt);
@@ -283,62 +282,61 @@ public class Home extends javax.swing.JFrame {
         javax.swing.GroupLayout headerLayout = new javax.swing.GroupLayout(header);
         header.setLayout(headerLayout);
         headerLayout.setHorizontalGroup(
-                headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(categoryLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(62, 62, 62)
-                                .addComponent(searchTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchBtn)
-                                .addGap(148, 148, 148)
-                                .addComponent(cartBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(orderBtn)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(accountBtn)
-                                .addContainerGap()));
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(categoryLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addComponent(searchTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchBtn)
+                .addGap(148, 148, 148)
+                .addComponent(cartBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(orderBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(accountBtn)
+                .addContainerGap())
+        );
         headerLayout.setVerticalGroup(
-                headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(headerLayout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(categoryLabel)
-                                        .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(searchBtn)
-                                        .addComponent(cartBtn)
-                                        .addComponent(orderBtn)
-                                        .addComponent(accountBtn)
-                                        .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 22,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(12, 12, 12)));
+            headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerLayout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(headerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(categoryLabel)
+                    .addComponent(categoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchBtn)
+                    .addComponent(cartBtn)
+                    .addComponent(orderBtn)
+                    .addComponent(accountBtn)
+                    .addComponent(searchTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12))
+        );
 
         productTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         productTable.setModel(new javax.swing.table.DefaultTableModel(
-                new Object[][] {
+            new Object [][] {
 
-                },
-                new String[] {
-                        "ID", "Tên món ăn", "Giá", "Danh mục"
-                }) {
-            Class[] types = new Class[] {
-                    java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
+            },
+            new String [] {
+                "ID", "Tên món ăn", "Giá", "Danh mục"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean[] {
-                    false, false, false, false
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
+                return types [columnIndex];
             }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
+                return canEdit [columnIndex];
             }
         });
         productTable.setRowHeight(30);
@@ -389,35 +387,26 @@ public class Home extends javax.swing.JFrame {
         javax.swing.GroupLayout previewPanelLayout = new javax.swing.GroupLayout(previewPanel);
         previewPanel.setLayout(previewPanelLayout);
         previewPanelLayout.setHorizontalGroup(
-                previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(previewPanelLayout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addGroup(previewPanelLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 258,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(nameLabel)
-                                        .addGroup(previewPanelLayout.createSequentialGroup()
-                                                .addComponent(jLabel2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 50,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(50, 50, 50)
-                                                .addComponent(addToCartBtn))
-                                        .addGroup(previewPanelLayout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout
-                                                        .createSequentialGroup()
-                                                        .addComponent(priceLabel)
-                                                        .addPreferredGap(
-                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(stockTxt))
-                                                .addComponent(descriptionLabel,
-                                                        javax.swing.GroupLayout.Alignment.LEADING,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 305,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 30, Short.MAX_VALUE)));
+            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(previewPanelLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nameLabel)
+                    .addGroup(previewPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(addToCartBtn))
+                    .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout.createSequentialGroup()
+                            .addComponent(priceLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(stockTxt))
+                        .addComponent(descriptionLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 30, Short.MAX_VALUE))
+        );
         previewPanelLayout.setVerticalGroup(
             previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(previewPanelLayout.createSequentialGroup()
@@ -436,37 +425,43 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(addToCartBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)));        
+                .addGap(31, 31, 31))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(previewPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(previewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 542,
-                                                Short.MAX_VALUE))));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void orderBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_orderBtnActionPerformed
         // TODO add your handling code here:
-        myOrderForm.setVisible(true);
+        int userId = UsersDAO.currentUser.getUserId();
+        List<Order> orders = OrderDAO.getOrdersByUserId(userId); // Lấy danh sách đơn hàng theo ID người dùng
+        
+        if (orders.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Bạn chưa có đơn hàng nào!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            this.setVisible(false); // Ẩn Home
+            myOrderForm.setVisible(true);
+        }
     }// GEN-LAST:event_orderBtnActionPerformed
 
     private void amountTxtActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_amountTxtActionPerformed
@@ -491,6 +486,10 @@ public class Home extends javax.swing.JFrame {
 
     private void addToCartBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_addToCartBtnActionPerformed
         // TODO add your handling code here:
+        if (UsersDAO.currentUser == null) {
+            JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập!");
+            return;
+        }
         int selectedRow = productTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trước khi thêm vào giỏ hàng!");
@@ -500,7 +499,16 @@ public class Home extends javax.swing.JFrame {
         int productId = (int) productTable.getValueAt(selectedRow, 0);
         int quantity = convertStringToInt(amountTxt.getText());
         int userId = UsersDAO.currentUser.getUserId();
+        
+        // Lấy số lượng tồn kho của sản phẩm
+        int stockQuantity = ProductDAO.getProductStock(productId);
 
+        // Kiểm tra số lượng có vượt quá kho không 
+        if (quantity > stockQuantity) {
+            JOptionPane.showMessageDialog(this, "Số lượng sản phẩm trong kho không đủ! Hiện chỉ còn " + stockQuantity + " sản phẩm.");
+            return;
+        }
+        
         CartDAO.addToCart(userId, productId, quantity);
         cartForm.loadCart(userId);
     }
@@ -520,7 +528,8 @@ public class Home extends javax.swing.JFrame {
 
     private void cartBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cartBtnActionPerformed
         // TODO add your handling code here:
-        cartForm.setVisible(true);
+        this.setVisible(false); // Ẩn trang chủ
+        cartForm.setVisible(true); // Hiển thị giỏ hàng
     }// GEN-LAST:event_cartBtnActionPerformed
 
     private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed

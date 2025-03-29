@@ -39,10 +39,10 @@ public class OrderDAO {
         }
         return -1; // Trả về -1 nếu thất bại
     }
-
+    
     public List<Order> getAllOrders() {
         List<Order> orders = new ArrayList<>();
-        String query = "SELECT * FROM orders";
+        String query = "SELECT * FROM `order`";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -67,7 +67,7 @@ public class OrderDAO {
     }
 
     public Order getOrderById(int orderID) {
-        String query = "SELECT * FROM orders WHERE order_id = ?";
+        String query = "SELECT * FROM `order` WHERE order_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, orderID);
@@ -92,12 +92,12 @@ public class OrderDAO {
     }
 
     public boolean updateOrder(Order order) {
-        String query = "UPDATE orders SET status = ?, name = ?, phone_number = ?, address = ?, total_price = ?, created_at = ?, user_id = ? WHERE order_id = ?";
+        String query = "UPDATE `order` SET status = ?, name = ?, phone_number = ?, address = ?, total_price = ?, created_at = ?, user_id = ? WHERE order_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement st = conn.prepareStatement(query)) {
             st.setString(1, order.getStatus());
-            st.setString(2, order.getPhoneNumber());
-            st.setString(3, order.getName());
+            st.setString(2, order.getName());
+            st.setString(3, order.getPhoneNumber());
             st.setString(4, order.getAddress());
             st.setDouble(5, order.getTotalPrice());
             st.setTimestamp(6, order.getCreatedAt());
@@ -114,7 +114,7 @@ public class OrderDAO {
 
     public List<String> getOrderStatuses() {
         List<String> statuses = new ArrayList<>();
-        String sql = "SHOW COLUMNS FROM orders LIKE 'status'";
+        String sql = "SHOW COLUMNS FROM `order` LIKE 'status'";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -135,4 +135,80 @@ public class OrderDAO {
 
         return statuses;
     }
+    
+    // Lấy danh sách đơn hàng theo userID
+    public static List<Order> getOrdersByUserId(int userId) {
+        List<Order> orders = new ArrayList<>();
+        String query = "SELECT * FROM `order` WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                orders.add(new Order(
+                        rs.getInt("order_id"),
+                        rs.getString("status"),
+                        rs.getString("name"),
+                        rs.getString("phone_number"),
+                        rs.getString("address"),
+                        rs.getDouble("total_price"),
+                        rs.getTimestamp("created_at"),
+                        rs.getInt("user_id")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orders;
+    }
+    
+    // Lấy doanh thu của các đơn hàng hoàn thành
+    public double getTotalRevenue() {
+        String query = "SELECT SUM(total_price) FROM `order` WHERE status = 'completed'";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    // Số lượng đơn hàng
+    public int getTotalOrders() {
+        String query = "SELECT COUNT(*) FROM `order`";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    // Lấy số lượng đơn hàng theo trạng thái
+    public int getOrderCountByStatus(String status) {
+        String query = "SELECT COUNT(*) FROM `order` WHERE status = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, status);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
 }

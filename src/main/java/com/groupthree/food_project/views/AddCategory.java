@@ -20,6 +20,7 @@ public class AddCategory extends javax.swing.JFrame {
      */
     public AddCategory() {
         initComponents();
+        setLocationRelativeTo(null);
         
         moveCategory();
     }
@@ -71,7 +72,6 @@ public class AddCategory extends javax.swing.JFrame {
         });
 
         lblProduct1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblProduct1.setForeground(new java.awt.Color(0, 0, 0));
         lblProduct1.setText("▶ Thêm danh mục");
 
         lblCategory.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -91,7 +91,6 @@ public class AddCategory extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 51, 0));
         jLabel7.setText("*");
 
-        btnCancel.setBackground(new java.awt.Color(255, 255, 255));
         btnCancel.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnCancel.setForeground(new java.awt.Color(102, 102, 102));
         btnCancel.setText("Hủy");
@@ -106,10 +105,6 @@ public class AddCategory extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 909, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 824, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47))
             .addGroup(layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -127,6 +122,10 @@ public class AddCategory extends javax.swing.JFrame {
                         .addComponent(btnAddCategory))
                     .addComponent(txtNameCategory))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 824, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,8 +180,11 @@ public class AddCategory extends javax.swing.JFrame {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         // TODO add your handling code here:
         int choice = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn hủy", "Xác nhận", JOptionPane.YES_NO_OPTION);
-        if(choice == JOptionPane.YES_OPTION)
-        this.dispose(); //Đóng cửa sổ hiện tại và giải phóng tài nguyên
+        if(choice == JOptionPane.YES_OPTION) {
+            CategoryManagement cate = new CategoryManagement();
+            this.dispose(); //Đóng cửa sổ hiện tại và giải phóng tài nguyên
+            cate.setVisible(true);
+        }
     }//GEN-LAST:event_btnCancelActionPerformed
 
     /**

@@ -9,7 +9,9 @@ import com.groupthree.food_project.dao.OrderDetailDAO;
 import com.groupthree.food_project.dao.ProductDAO;
 import com.groupthree.food_project.models.Order;
 import com.groupthree.food_project.models.OrderDetail;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -31,6 +33,7 @@ public class UpdateStatus extends javax.swing.JFrame {
      */
     public UpdateStatus() {
         initComponents();
+        setLocationRelativeTo(null);
         loadOrderBox();
     }
 
@@ -70,7 +73,7 @@ public class UpdateStatus extends javax.swing.JFrame {
         }
         
         // Hiện tổng tiền
-        txtTotalPrice.setText(String.valueOf(order.getTotalPrice()));
+        txtTotalPrice.setText(String.format("%,.0f", order.getTotalPrice()) + " VND");
     }
     
     public void fill(){
@@ -82,7 +85,7 @@ public class UpdateStatus extends javax.swing.JFrame {
     // Lấy thông tin về các trạng thái đơn hàng và chọn mặc định
     private void loadOrderBox() {
         orderBox.removeAllItems(); // Xóa toàn bộ trạng thái trong JComboBox trước khi thêm mới
-
+      
         String selectedStatus = null;
         if (order != null && order.getStatus() != null) {
             selectedStatus = order.getStatus();
@@ -91,7 +94,7 @@ public class UpdateStatus extends javax.swing.JFrame {
         //Thêm trạng thái mới vào orderBox và chọn mặc định
         List<String> statuses = orderDAO.getOrderStatuses(); // Lấy danh sách trạng thái từ DB
         for (String status : statuses) {
-            orderBox.addItem(status);
+            orderBox.addItem(status);      
             if (selectedStatus != null && status.equals(selectedStatus.trim())) {
                 orderBox.setSelectedItem(status);
             }
@@ -123,6 +126,7 @@ public class UpdateStatus extends javax.swing.JFrame {
         tableOrderDetails = new javax.swing.JTable();
         txtTotalPrice = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -149,7 +153,7 @@ public class UpdateStatus extends javax.swing.JFrame {
             }
         });
 
-        txtOrderID.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        txtOrderID.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         txtOrderID.setForeground(new java.awt.Color(0, 51, 153));
         txtOrderID.setText("OrderId");
 
@@ -184,16 +188,20 @@ public class UpdateStatus extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel4.setText("TỔNG TIỀN:");
 
+        backBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        backBtn.setText("Quay lại");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addComponent(jSeparator2)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(329, 329, 329))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -213,6 +221,12 @@ public class UpdateStatus extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtOrderID, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(56, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(backBtn)
+                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,7 +250,9 @@ public class UpdateStatus extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -257,6 +273,15 @@ public class UpdateStatus extends javax.swing.JFrame {
         // Gọi phương thức cập nhật đơn hàng trong database
         boolean updated = orderDAO.updateOrder(order);
         if (updated) {
+            
+            // Nếu cập nhật thành công và trạng thái là "completed" thì giảm số lượng sản phẩm trong kho
+            if ("completed".equals(selectedStatus)) {
+                List<OrderDetail> orderDetails = OrderDetailDAO.getOrderDetailsByOrderId(order.getOrderId());
+                for (OrderDetail detail : orderDetails) {
+                    ProductDAO.reduceProductQuantity(detail.getProductId(), detail.getQuantity());
+                }
+            }
+            
             JOptionPane.showMessageDialog(this, "Cập nhật trạng thái thành công!");
             this.dispose();
             OrderManagement orderManagement = new OrderManagement();
@@ -265,6 +290,13 @@ public class UpdateStatus extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Cập nhật trạng thái thất bại!");
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        OrderManagement order = new OrderManagement();
+        this.dispose();
+        order.setVisible(true);
+    }//GEN-LAST:event_backBtnActionPerformed
 
     
     /**
@@ -303,6 +335,7 @@ public class UpdateStatus extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

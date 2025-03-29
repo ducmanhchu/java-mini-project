@@ -26,12 +26,32 @@ import javax.swing.table.DefaultTableModel;
  * @author Alone
  */
 public class CartView extends javax.swing.JFrame {
+    private Home home; // Tham chiếu tới home
 
     /**
      * Creates new form Cart
      */
-    public CartView() {
+    public CartView(Home home) {
+        this.home = home;
         initComponents();
+        setLocationRelativeTo(null);
+        
+        // Cập nhật khi thay đổi số lượng sản phẩm trong giỏ
+        CartTable.getModel().addTableModelListener(e -> {
+            if (e.getColumn() == 2) { // Cột số lượng
+                int row = e.getFirstRow();
+                int cartId = (int) CartTable.getValueAt(row, 0);
+                int newQuantity = (int) CartTable.getValueAt(row, 2);
+
+                if (newQuantity > 0) {
+                    CartDAO.updateCartItem(cartId, newQuantity); // Cập nhật vào DB
+                    loadCart(UsersDAO.currentUser.getUserId()); // Load lại giỏ hàng
+                } else {
+                    JOptionPane.showMessageDialog(this, "Số lượng phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    loadCart(UsersDAO.currentUser.getUserId());
+                }
+            }
+        });
     }
 
     public JLabel getTotalLabel() {
@@ -52,10 +72,10 @@ public class CartView extends javax.swing.JFrame {
             double totalItemPrice = item.getPrice() * item.getQuantity();
             totalPrice += totalItemPrice;
 
-            model.addRow(new Object[] { item.getCartId(), item.getProductName(), item.getQuantity(), totalItemPrice });
+            model.addRow(new Object[] { item.getCartId(), item.getProductName(), item.getQuantity(), item.getPrice() });
         }
 
-        Total.setText("Tổng tiền: " + totalPrice + " VND");
+         Total.setText("Tổng tiền: " + String.format("%,.0f", totalPrice) + " VNĐ"); 
     }
 
     public void addToCart(int userId, int productId, int quantity) {
@@ -79,8 +99,10 @@ public class CartView extends javax.swing.JFrame {
         CartTable = new javax.swing.JTable();
         OrderButton = new javax.swing.JButton();
         Total = new javax.swing.JLabel();
+        backBtn = new javax.swing.JButton();
+        removeBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -92,18 +114,32 @@ public class CartView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Tên món ăn", "Số lượng", "Giá thành"
+                "ID", "Tên món ăn", "Số lượng", "Đơn giá"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        CartTable.setRowHeight(30);
         jScrollPane3.setViewportView(CartTable);
+        if (CartTable.getColumnModel().getColumnCount() > 0) {
+            CartTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+            CartTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+            CartTable.getColumnModel().getColumn(2).setPreferredWidth(125);
+            CartTable.getColumnModel().getColumn(3).setPreferredWidth(150);
+        }
 
         OrderButton.setBackground(new java.awt.Color(0, 0, 0));
         OrderButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -118,33 +154,59 @@ public class CartView extends javax.swing.JFrame {
         Total.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Total.setText("Tổng tiền:");
 
+        backBtn.setBackground(new java.awt.Color(153, 204, 255));
+        backBtn.setText("Quay lại");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+
+        removeBtn.setBackground(new java.awt.Color(204, 0, 0));
+        removeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        removeBtn.setText("Xóa");
+        removeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 990, Short.MAX_VALUE)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(91, 91, 91)
-                .addComponent(OrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Total, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(190, 190, 190)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(OrderButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(Total, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(removeBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(backBtn)))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(OrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addComponent(backBtn)
+                    .addComponent(removeBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(OrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Total, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(11, 11, 11))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -161,6 +223,31 @@ public class CartView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Trở lại trang chủ
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        home.setVisible(true); // Trở về trang chủ
+    }//GEN-LAST:event_backBtnActionPerformed
+    
+    // Xóa sản phẩm khỏi giỏ
+    private void removeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeBtnActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = CartTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xóa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int cartId = (int) CartTable.getValueAt(selectedRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            CartDAO.removeFromCart(cartId); // Xóa sản phẩm khỏi DB
+            loadCart(UsersDAO.currentUser.getUserId()); // Cập nhật lại giao diện
+        }
+    }//GEN-LAST:event_removeBtnActionPerformed
+
     private void OrderButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_OrderButtonActionPerformed
         // TODO add your handling code here:
         int UserId = UsersDAO.currentUser.getUserId();
@@ -171,7 +258,8 @@ public class CartView extends javax.swing.JFrame {
             return;
         }
 
-        CheckOut checkForm = new CheckOut(cartItems); // Truyền danh sách giỏ hàng
+        CheckOut checkForm = new CheckOut(cartItems, this); // Truyền danh sách giỏ hàng
+        this.setVisible(false);
         checkForm.setVisible(true);
     }// GEN-LAST:event_OrderButtonActionPerformed
 
@@ -209,7 +297,7 @@ public class CartView extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CartView().setVisible(true);
+                new CartView(new Home()).setVisible(true);
             }
         });
     }
@@ -218,8 +306,10 @@ public class CartView extends javax.swing.JFrame {
     private javax.swing.JTable CartTable;
     private javax.swing.JButton OrderButton;
     private javax.swing.JLabel Total;
+    private javax.swing.JButton backBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JButton removeBtn;
     // End of variables declaration//GEN-END:variables
 }

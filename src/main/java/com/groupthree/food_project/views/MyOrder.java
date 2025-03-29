@@ -7,6 +7,7 @@ package com.groupthree.food_project.views;
 import com.groupthree.food_project.dao.OrderDetailDAO;
 import com.groupthree.food_project.dao.UsersDAO;
 import com.groupthree.food_project.models.OrderDetail;
+import java.awt.Color;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -16,11 +17,14 @@ import javax.swing.table.DefaultTableModel;
  * @author Alone
  */
 public class MyOrder extends javax.swing.JFrame {
+    private Home home; // Tham chiếu tới Home
     /**
      * Creates new form MyOrder
      */
-    public MyOrder() {
+    public MyOrder(Home home) {
+        this.home = home;
         initComponents();
+        setLocationRelativeTo(null);
         int userId = UsersDAO.currentUser.getUserId();
         loadOrderList(userId);
 
@@ -56,6 +60,9 @@ public class MyOrder extends javax.swing.JFrame {
         orderTable = new javax.swing.JTable();
         total = new javax.swing.JLabel();
         CancelButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        backBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,29 +82,39 @@ public class MyOrder extends javax.swing.JFrame {
 
         orderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Món ăn", "Số lượng", "Giá tiền"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, true, true
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        orderTable.setRowHeight(30);
         jScrollPane2.setViewportView(orderTable);
+        if (orderTable.getColumnModel().getColumnCount() > 0) {
+            orderTable.getColumnModel().getColumn(0).setPreferredWidth(250);
+            orderTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+            orderTable.getColumnModel().getColumn(2).setPreferredWidth(150);
+        }
 
         total.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         total.setText("Thành tiền:");
 
-        CancelButton.setBackground(new java.awt.Color(0, 0, 0));
+        CancelButton.setBackground(new java.awt.Color(204, 0, 51));
         CancelButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         CancelButton.setForeground(new java.awt.Color(255, 255, 255));
         CancelButton.setText("Huỷ đơn");
@@ -107,36 +124,64 @@ public class MyOrder extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel1.setText("Đơn hàng của tôi");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Chọn đơn hàng:");
+
+        backBtn.setBackground(new java.awt.Color(102, 153, 255));
+        backBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        backBtn.setForeground(new java.awt.Color(255, 255, 255));
+        backBtn.setText("Quay lại");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(OrderList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(status)
-                .addGap(76, 76, 76))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 970, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(total)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(CancelButton)
-                .addGap(56, 56, 56))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(149, 149, 149)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(OrderList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(status)
+                        .addGap(104, 104, 104))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(total)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(CancelButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(backBtn)
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(0, 19, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(OrderList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(total)
-                    .addComponent(CancelButton))
-                .addGap(12, 12, 12))
+                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(11, 11, 11)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(CancelButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(backBtn)
+                    .addComponent(total))
+                .addGap(8, 8, 8))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -152,6 +197,13 @@ public class MyOrder extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        home.setVisible(true);
+    }//GEN-LAST:event_backBtnActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // Lấy orderId từ danh sách
@@ -170,7 +222,14 @@ public class MyOrder extends javax.swing.JFrame {
                     javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        
+        // Chỉ cho phép hủy đơn khi đơn hàng ở trạng thái "pending"
+        if (!"Chờ xác nhận".equals(orderStatus)) { // Kiểm tra nếu không phải trạng thái pending
+            javax.swing.JOptionPane.showMessageDialog(this, "Chỉ có thể hủy đơn hàng khi đang chờ xác nhận!", 
+                    "Không thể hủy", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         // Xác nhận từ người dùng
         int confirm = javax.swing.JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn hủy đơn hàng này?",
                 "Xác nhận hủy", javax.swing.JOptionPane.YES_NO_OPTION);
@@ -240,7 +299,7 @@ public class MyOrder extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MyOrder().setVisible(true);
+                new MyOrder(new Home()).setVisible(true);
             }
         });
     }
@@ -263,8 +322,46 @@ public class MyOrder extends javax.swing.JFrame {
             });
             sum+=detail.getQuantity()*detail.getUnitPrice();
         }
-        total.setText("Tổng tiền " + sum);
-        status.setText("Trạng thái "+OrderDetailDAO.getOrderStatus(orderId));
+        total.setText("Tổng tiền: " + String.format("%,.0f", sum) + " VND"); // Hiển thị tổng tiền có dấu phẩy
+
+        // Lấy trạng thái đơn hàng từ DB
+        String orderStatus = OrderDetailDAO.getOrderStatus(orderId);
+        String statusText = "";
+        Color statusColor = Color.BLACK; // Màu mặc định
+
+        switch (orderStatus) {
+            case "pending":
+                statusText = "Đang chờ xác nhận";
+                statusColor = Color.ORANGE;
+                break;
+            case "confirmed":
+                statusText = "Đã xác nhận";
+                statusColor = new Color(0, 153, 255); // Màu xanh dương nhạt
+                break;
+            case "preparing":
+                statusText = "Đang chuẩn bị";
+                statusColor = new Color(255, 140, 0); // Màu cam
+                break;
+            case "delivering":
+                statusText = "Đang giao hàng";
+                statusColor = new Color(0, 204, 0); // Màu xanh lá cây
+                break;
+            case "completed":
+                statusText = "Hoàn thành";
+                statusColor = Color.BLUE;
+                break;
+            case "cancelled":
+                statusText = "Đã hủy";
+                statusColor = Color.RED;
+                break;
+            default:
+                statusText = "Không xác định";
+                statusColor = Color.GRAY;
+                break;
+        }
+
+        status.setText("Trạng thái: " + statusText);
+        status.setForeground(statusColor); // Đổi màu chữ trạng thái
     }
 
     private void loadOrderList(int userId) {
@@ -294,6 +391,9 @@ public class MyOrder extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CancelButton;
     private javax.swing.JComboBox<String> OrderList;
+    private javax.swing.JButton backBtn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable orderTable;

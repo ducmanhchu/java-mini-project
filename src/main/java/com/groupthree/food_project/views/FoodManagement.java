@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.groupthree.food_project.views;
+import com.groupthree.food_project.dao.*;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,6 +17,11 @@ public class FoodManagement extends javax.swing.JFrame {
      */
     public FoodManagement() {
         initComponents();
+        setLocationRelativeTo(null);
+        if (UsersDAO.currentUser != null) {
+            String nameAccount = UsersDAO.currentUser.getUsername(); // Lấy tên tài khoản đã đăng nhập
+            accountBtn.setText(nameAccount);
+        }
     }
 
     /**
@@ -31,17 +38,19 @@ public class FoodManagement extends javax.swing.JFrame {
         btnProductManagement = new javax.swing.JButton();
         btnCategoryManagement = new javax.swing.JButton();
         btnOrderManagement = new javax.swing.JButton();
+        reportBtn = new javax.swing.JButton();
+        accountBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Food Management");
+        jLabel1.setText("Hệ thống quản trị");
 
         btnProductManagement.setBackground(new java.awt.Color(0, 51, 204));
         btnProductManagement.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnProductManagement.setForeground(new java.awt.Color(255, 255, 255));
-        btnProductManagement.setText("Product Management");
+        btnProductManagement.setText("Quản lý sản phẩm");
         btnProductManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProductManagementActionPerformed(evt);
@@ -51,7 +60,7 @@ public class FoodManagement extends javax.swing.JFrame {
         btnCategoryManagement.setBackground(new java.awt.Color(0, 51, 204));
         btnCategoryManagement.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnCategoryManagement.setForeground(new java.awt.Color(255, 255, 255));
-        btnCategoryManagement.setText("Category Management");
+        btnCategoryManagement.setText("Quản lý danh mục");
         btnCategoryManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCategoryManagementActionPerformed(evt);
@@ -61,10 +70,29 @@ public class FoodManagement extends javax.swing.JFrame {
         btnOrderManagement.setBackground(new java.awt.Color(0, 51, 204));
         btnOrderManagement.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnOrderManagement.setForeground(new java.awt.Color(255, 255, 255));
-        btnOrderManagement.setText("Order Management");
+        btnOrderManagement.setText("Quản lý đơn hàng");
         btnOrderManagement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOrderManagementActionPerformed(evt);
+            }
+        });
+
+        reportBtn.setBackground(new java.awt.Color(0, 51, 204));
+        reportBtn.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        reportBtn.setForeground(new java.awt.Color(255, 255, 255));
+        reportBtn.setText("Thống kê bán hàng");
+        reportBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportBtnActionPerformed(evt);
+            }
+        });
+
+        accountBtn.setBackground(new java.awt.Color(153, 204, 255));
+        accountBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        accountBtn.setText("Tài khoản");
+        accountBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                accountBtnActionPerformed(evt);
             }
         });
 
@@ -74,35 +102,38 @@ public class FoodManagement extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
+                .addGap(239, 239, 239)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 591, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(btnProductManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(btnCategoryManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(btnOrderManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(58, Short.MAX_VALUE))
+                    .addComponent(btnCategoryManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnProductManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnOrderManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(reportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(254, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(accountBtn)
+                .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(accountBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(89, 89, 89)
                 .addComponent(btnProductManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(45, 45, 45)
                 .addComponent(btnCategoryManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(51, 51, 51)
                 .addComponent(btnOrderManagement, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 72, Short.MAX_VALUE))
+                .addGap(41, 41, 41)
+                .addComponent(reportBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 90, Short.MAX_VALUE))
         );
 
         pack();
@@ -128,6 +159,26 @@ public class FoodManagement extends javax.swing.JFrame {
         orderManagement.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnOrderManagementActionPerformed
+
+    private void reportBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportBtnActionPerformed
+        // TODO add your handling code here:
+        Report report = new Report();
+        this.setVisible(false);
+        report.setVisible(true);
+    }//GEN-LAST:event_reportBtnActionPerformed
+    
+    // Xử lý mỗi khi bấm nút tài khoản (Đăng xuất tài khoản)
+    private void accountBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountBtnActionPerformed
+        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn đăng xuất?", "Xác nhận",
+            JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            UsersDAO.currentUser = null; // Xóa thông tin đăng nhập
+            JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất!");
+            this.setVisible(false);
+            new Home().setVisible(true);
+        }
+    }//GEN-LAST:event_accountBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -165,10 +216,12 @@ public class FoodManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton accountBtn;
     private javax.swing.JButton btnCategoryManagement;
     private javax.swing.JButton btnOrderManagement;
     private javax.swing.JButton btnProductManagement;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton reportBtn;
     // End of variables declaration//GEN-END:variables
 }

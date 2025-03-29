@@ -116,4 +116,70 @@ public class ProductDAO {
             return false;
         }
     }
+    
+    // Giảm số lượng sản phẩm trong kho dựa trên id và số lượng sản phẩm đó đã bán
+    public static boolean reduceProductQuantity(int productId, int quantitySold) {
+        String query = "UPDATE product SET stock = stock - ? WHERE product_id = ? AND stock >= ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, quantitySold);
+            stmt.setInt(2, productId);
+            stmt.setInt(3, quantitySold); // Đảm bảo không giảm quá mức tồn kho
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    // Lấy số lượng sản phẩm có trong kho dựa vào id
+    public static int getProductStock(int productId) {
+        String query = "SELECT stock FROM product WHERE product_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, productId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("stock");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0; // Nếu có lỗi hoặc không tìm thấy sản phẩm, trả về 0
+    }
+    
+    
+   // Lấy ra các sản phẩm bán chạy nhất
+    public List<Object[]> getTopSellingProducts(int limit) {
+        List<Object[]> productList = new ArrayList<>();
+        String query = "SELECT p.product_id, p.name, SUM(od.quantity) AS total_sold " +
+                       "FROM order_detail od " +
+                       "JOIN `order` o ON od.order_id = o.order_id " +
+                       "JOIN product p ON od.product_id = p.product_id " +
+                       "WHERE o.status = 'completed' " +
+                       "GROUP BY p.product_id, p.name " +
+                       "ORDER BY total_sold DESC " +
+                       "LIMIT ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, limit);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("product_id"),
+                    rs.getString("name"),
+                    rs.getInt("total_sold")
+                };
+                productList.add(row);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productList;
+    }
+
 }

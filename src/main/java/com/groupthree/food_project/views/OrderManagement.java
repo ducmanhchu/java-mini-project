@@ -29,6 +29,7 @@ public class OrderManagement extends javax.swing.JFrame {
      */
     public OrderManagement() {
         initComponents();
+        setLocationRelativeTo(null);
         
         initTableOrderListener();
         loadTableOrder();
@@ -73,14 +74,14 @@ public class OrderManagement extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Hóa đơn", "Tên hóa đơn", "SDT", "Địa chỉ", "Tổng tiền", "Ngày tạo", "Trạng thái", "ID người dùng"
+                "ID", "Người nhận", "SDT", "Địa chỉ", "Tổng tiền", "Ngày tạo", "Trạng thái"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -96,14 +97,12 @@ public class OrderManagement extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableOrder);
         if (tableOrder.getColumnModel().getColumnCount() > 0) {
             tableOrder.getColumnModel().getColumn(0).setResizable(false);
-            tableOrder.getColumnModel().getColumn(0).setPreferredWidth(60);
+            tableOrder.getColumnModel().getColumn(0).setPreferredWidth(30);
             tableOrder.getColumnModel().getColumn(1).setPreferredWidth(125);
             tableOrder.getColumnModel().getColumn(3).setPreferredWidth(150);
             tableOrder.getColumnModel().getColumn(4).setPreferredWidth(75);
             tableOrder.getColumnModel().getColumn(5).setPreferredWidth(125);
             tableOrder.getColumnModel().getColumn(6).setPreferredWidth(80);
-            tableOrder.getColumnModel().getColumn(7).setResizable(false);
-            tableOrder.getColumnModel().getColumn(7).setPreferredWidth(60);
         }
 
         btnUpdateStatus.setBackground(new java.awt.Color(0, 0, 204));
@@ -132,19 +131,17 @@ public class OrderManagement extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 794, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(240, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 943, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdateStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnBack2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(373, 373, 373))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnUpdateStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 943, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBack2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 794, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,11 +152,11 @@ public class OrderManagement extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnUpdateStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(btnBack2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
@@ -168,11 +165,19 @@ public class OrderManagement extends javax.swing.JFrame {
     private void btnUpdateStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateStatusActionPerformed
         // TODO add your handling code here:
         if(orderId == -1)
-            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin hóa đơn");
+            JOptionPane.showMessageDialog(this, "Hãy chọn đơn hàng muốn cập nhật!");
         else{
             Order o = orderDAO.getOrderById(orderId);
+            
+            // Kiểm tra nếu đơn hàng đã bị hủy thì không cho cập nhật
+            if ("cancelled".equalsIgnoreCase(o.getStatus())) {
+                JOptionPane.showMessageDialog(this, "Đơn hàng đã bị hủy, không thể cập nhật trạng thái!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return; 
+            }
+            
             UpdateStatus updateStatus = new UpdateStatus(o);
             updateStatus.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            this.setVisible(false);
             updateStatus.setVisible(true);
         }
     }//GEN-LAST:event_btnUpdateStatusActionPerformed
@@ -199,8 +204,7 @@ public class OrderManagement extends javax.swing.JFrame {
                 order.getAddress(),
                 order.getTotalPrice(),
                 order.getCreatedAt(),
-                order.getStatus(),
-                order.getUserId()
+                order.getStatus()
             });
         }
         
@@ -254,8 +258,6 @@ public class OrderManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnBack1;
     private javax.swing.JButton btnBack2;
     private javax.swing.JButton btnUpdateStatus;
     private javax.swing.JLabel jLabel1;
