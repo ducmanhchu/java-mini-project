@@ -14,14 +14,14 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
     private Home home;
     private UsersDAO  usersDAO;
-    private Admin admin;
+    private FoodManagement foodManagement;
     
     /**
      * Creates new form Login
      */
-    public Login(Home home, Admin admin) {
+    public Login(Home home, FoodManagement foodManagement) {
         this.home = home;   // Lưu lại tham chiếu tới Home
-        this.admin = admin; // Tham chiếu tới trang chủ của admin
+        this.foodManagement = foodManagement; // Tham chiếu tới trang chủ của admin
         this.usersDAO = new UsersDAO();
         initComponents();
         setLocationRelativeTo(null);    // Hiển thị ở giữa màn hình
@@ -155,7 +155,7 @@ public class Login extends javax.swing.JFrame {
             dispose(); 
 
             if (UsersDAO.currentUser.getRole().equals("admin")) {
-                new Admin().setVisible(true); // Chuyển đến Admin
+                new FoodManagement().setVisible(true); // Chuyển đến FoodManagement
             } else {
                 new Home().setVisible(true); // Chuyển đến Home
             }

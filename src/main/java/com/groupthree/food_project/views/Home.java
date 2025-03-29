@@ -237,8 +237,7 @@ public class Home extends javax.swing.JFrame {
 
         categoryBox.setBackground(new java.awt.Color(204, 204, 204));
         categoryBox.setForeground(new java.awt.Color(51, 51, 51));
-        categoryBox.setModel(
-                new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        categoryBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));        
         categoryBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 categoryBoxActionPerformed(evt);
@@ -251,6 +250,11 @@ public class Home extends javax.swing.JFrame {
         searchBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         searchBtn.setForeground(new java.awt.Color(255, 255, 255));
         searchBtn.setText("Tìm kiếm");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
 
         cartBtn.setBackground(new java.awt.Color(153, 204, 255));
         cartBtn.setText("Giỏ hàng");
@@ -415,28 +419,24 @@ public class Home extends javax.swing.JFrame {
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 30, Short.MAX_VALUE)));
         previewPanelLayout.setVerticalGroup(
-                previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(previewPanelLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(nameLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(previewPanelLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(priceLabel)
-                                        .addComponent(stockTxt))
-                                .addGap(18, 18, 18)
-                                .addComponent(descriptionLabel)
-                                .addGap(70, 70, 70)
-                                .addGroup(previewPanelLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(addToCartBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2)
-                                        .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(31, 31, 31)));
+            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(previewPanelLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(nameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(priceLabel)
+                    .addComponent(stockTxt))
+                .addGap(18, 18, 18)
+                .addComponent(descriptionLabel)
+                .addGap(70, 70, 70)
+                .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addToCartBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)));        
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -469,10 +469,6 @@ public class Home extends javax.swing.JFrame {
         myOrderForm.setVisible(true);
     }// GEN-LAST:event_orderBtnActionPerformed
 
-    private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_categoryBoxActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_categoryBoxActionPerformed
-
     private void amountTxtActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_amountTxtActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_amountTxtActionPerformed
@@ -481,7 +477,7 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (UsersDAO.currentUser == null) {
             this.dispose();
-            new Login(this, new Admin()).setVisible(true);
+            new Login(this, new FoodManagement()).setVisible(true);
         } else {
             int confirm = JOptionPane.showConfirmDialog(this, "Bạn có muốn đăng xuất?", "Xác nhận",
                     JOptionPane.YES_NO_OPTION);
@@ -526,6 +522,14 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         cartForm.setVisible(true);
     }// GEN-LAST:event_cartBtnActionPerformed
+
+    private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoryBoxActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchBtnActionPerformed
 
     /**
      * @param args the command line arguments

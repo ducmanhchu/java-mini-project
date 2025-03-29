@@ -52,4 +52,46 @@ public class CategoryDAO {
         }
         return new Category(0, "Không xác định");
     }
+    
+    public boolean insertCategory(Category category) {
+        String query = "INSERT INTO category (category_name) VALUES (?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)) {
+            st.setString(1, category.getCategoryName());
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu thêm thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    
+    public boolean updateCategory(Category category) {
+        String query = "UPDATE category SET category_name = ? WHERE category_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)) {
+            st.setString(1, category.getCategoryName());
+            st.setInt(2, category.getCategoryId());
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public boolean deleteCategoryById(int categoryId) {
+        String query = "DELETE FROM category WHERE category_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement st = conn.prepareStatement(query)) {
+            st.setInt(1, categoryId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0; // Nếu xóa thành công, trả về true
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

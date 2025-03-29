@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**
  *
@@ -257,7 +258,7 @@ public class CheckOut extends javax.swing.JFrame {
 
         double totalPrice = calculateTotalPrice();
         int userId = UsersDAO.currentUser.getUserId();
-        Date createdAt = new Date();
+        Timestamp createdAt = new Timestamp(new Date().getTime());
 
         Order order = new Order("pending", cusName, phone, address, totalPrice, createdAt, userId);
         OrderDAO orderDAO = new OrderDAO();

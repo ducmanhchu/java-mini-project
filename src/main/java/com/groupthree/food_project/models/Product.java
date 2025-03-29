@@ -16,7 +16,7 @@ public class Product {
     private int stock;
     private String image;
     private int categoryId;
-
+            
     public Product() {}
 
     public Product(int productId, String name, String description, double price, int stock, String image, int categoryId) {
@@ -50,4 +50,5 @@ public class Product {
 
     public int getCategoryId() { return categoryId; }
     public void setCategoryId(int categoryId) { this.categoryId = categoryId; }
+    
 }
