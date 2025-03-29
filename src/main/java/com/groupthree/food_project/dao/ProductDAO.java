@@ -3,8 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.groupthree.food_project.dao;
-
-import com.groupthree.food_project.models.Category;
 import com.groupthree.food_project.models.Product;
 import java.sql.*;
 import java.util.ArrayList;

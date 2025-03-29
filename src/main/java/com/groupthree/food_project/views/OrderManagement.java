@@ -60,6 +60,7 @@ public class OrderManagement extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableOrder = new javax.swing.JTable();
         btnUpdateStatus = new javax.swing.JButton();
+        btnBack2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,6 +116,16 @@ public class OrderManagement extends javax.swing.JFrame {
             }
         });
 
+        btnBack2.setBackground(new java.awt.Color(102, 102, 102));
+        btnBack2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnBack2.setForeground(new java.awt.Color(255, 255, 255));
+        btnBack2.setText("Trở lại");
+        btnBack2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBack2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,6 +141,10 @@ public class OrderManagement extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 943, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdateStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBack2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(373, 373, 373))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,11 +153,13 @@ public class OrderManagement extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnUpdateStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnBack2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -159,6 +176,14 @@ public class OrderManagement extends javax.swing.JFrame {
             updateStatus.setVisible(true);
         }
     }//GEN-LAST:event_btnUpdateStatusActionPerformed
+
+    private void btnBack2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBack2ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        FoodManagement foodManagement = new FoodManagement();
+        foodManagement.setVisible(true);
+        
+    }//GEN-LAST:event_btnBack2ActionPerformed
 
     private void loadTableOrder(){
         // Lấy DefaultTableModel từ Jtable
@@ -182,7 +207,14 @@ public class OrderManagement extends javax.swing.JFrame {
         // Tạo renderer để căn giữa nội dung
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        centerRenderer.setVerticalAlignment(SwingConstants.CENTER);
+
+        // Lấy số lượng cột trong bảng
+        int columnCount = tableOrder.getColumnModel().getColumnCount();
+
+        // Duyệt qua tất cả các cột và đặt renderer
+        for (int i = 0; i < columnCount; i++) {
+            tableOrder.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
         
     }
     
@@ -222,6 +254,9 @@ public class OrderManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnBack1;
+    private javax.swing.JButton btnBack2;
     private javax.swing.JButton btnUpdateStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
