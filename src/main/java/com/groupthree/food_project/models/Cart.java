@@ -10,29 +10,38 @@ package com.groupthree.food_project.models;
  */
 public class Cart {
     private int cartId;
+    private int productId; 
+    private String productName;
     private int quantity;
-    private int userId;
-    private int productId;
+    private double price;
 
-    public Cart() {}
-
-    public Cart(int cartId, int quantity, int userId, int productId) {
+    public Cart(int cartId, int productId, String productName, int quantity, double price) {
         this.cartId = cartId;
-        this.quantity = quantity;
-        this.userId = userId;
         this.productId = productId;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.price = price;
     }
 
     // Getter & Setter
-    public int getCartId() { return cartId; }
-    public void setCartId(int cartId) { this.cartId = cartId; }
-
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
-
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
-
+    public int getCartId() {
+        return cartId;
+    }
     public int getProductId() { return productId; }
-    public void setProductId(int productId) { this.productId = productId; }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

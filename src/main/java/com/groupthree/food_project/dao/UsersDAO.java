@@ -20,7 +20,7 @@ public class UsersDAO {
     
     // Hàm xử lý đăng nhập
     public boolean login(String phoneNumber, String password) {
-        String sql = "SELECT username, phone_number, password, role FROM users WHERE phone_number = ?";
+        String sql = "SELECT user_id, username, phone_number, password, role FROM users WHERE phone_number = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
@@ -32,6 +32,7 @@ public class UsersDAO {
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     // Nếu đúng mật khẩu, lưu thông tin người dùng vào biến `currentUser`
                     currentUser = new Users(
+                        rs.getInt("user_id"),
                         rs.getString("username"),
                         rs.getString("phone_number"),
                         rs.getString("password"), // Mật khẩu đã hash

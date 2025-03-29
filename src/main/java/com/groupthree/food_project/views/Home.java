@@ -29,18 +29,24 @@ public class Home extends javax.swing.JFrame {
     private ProductDAO productDAO;
     private CategoryDAO categoryDAO;
     private List<Product> productList;
-    private Cart cartForm;
+    private CartView cartForm;
+    private MyOrder myOrderForm;
+    private static Home instance;
 
     /**
      * Creates new form Home
      */
+
     public Home() {
+        cartForm = new CartView();
+        if (UsersDAO.currentUser != null) {
+            cartForm.loadCart(UsersDAO.currentUser.getUserId());
+            myOrderForm = new MyOrder();
+        }
         productDAO = new ProductDAO();
         categoryDAO = new CategoryDAO();
-
         initComponents();
         setLocationRelativeTo(null);
-        cartForm = new Cart();
 
         // Mặc định khi chưa đăng nhập thì ẩn nút giỏ hàng và đơn hàng
         cartBtn.setVisible(false);
@@ -54,6 +60,13 @@ public class Home extends javax.swing.JFrame {
 
         // Tìm kiếm sản phẩm khi nhấn nút
         searchBtn.addActionListener(e -> loadProductTable());
+    }
+    
+    public static Home getInstance() {
+        if (instance == null) {
+            instance = new Home();
+        }
+        return instance;
     }
 
     // Kiểm tra trạng thái đăng nhập
@@ -189,6 +202,9 @@ public class Home extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -223,6 +239,11 @@ public class Home extends javax.swing.JFrame {
         categoryBox.setForeground(new java.awt.Color(51, 51, 51));
         categoryBox.setModel(
                 new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        categoryBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoryBoxActionPerformed(evt);
+            }
+        });
 
         categoryLabel.setText("Danh mục");
 
@@ -241,6 +262,11 @@ public class Home extends javax.swing.JFrame {
 
         orderBtn.setBackground(new java.awt.Color(153, 204, 255));
         orderBtn.setText("Đơn hàng của tôi");
+        orderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orderBtnActionPerformed(evt);
+            }
+        });
 
         accountBtn.setBackground(new java.awt.Color(153, 204, 255));
         accountBtn.setText("Đăng nhập");
@@ -347,6 +373,11 @@ public class Home extends javax.swing.JFrame {
         amountTxt.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         amountTxt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         amountTxt.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        amountTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                amountTxtActionPerformed(evt);
+            }
+        });
 
         stockTxt.setFont(new java.awt.Font("Segoe UI", 2, 12)); // NOI18N
         stockTxt.setText("Trong kho:");
@@ -355,50 +386,34 @@ public class Home extends javax.swing.JFrame {
         previewPanel.setLayout(previewPanelLayout);
         previewPanelLayout.setHorizontalGroup(
                 previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, previewPanelLayout.createSequentialGroup()
+                        .addGroup(previewPanelLayout.createSequentialGroup()
                                 .addGap(27, 27, 27)
                                 .addGroup(previewPanelLayout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(imageLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout
-                                                .createSequentialGroup()
-                                                .addGroup(previewPanelLayout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(nameLabel,
-                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING,
-                                                                previewPanelLayout.createSequentialGroup()
-                                                                        .addComponent(jLabel2)
-                                                                        .addPreferredGap(
-                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                        .addComponent(amountTxt,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                50,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addGap(50, 50, 50)
-                                                                        .addComponent(addToCartBtn))
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING,
-                                                                previewPanelLayout.createParallelGroup(
-                                                                        javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                        false)
-                                                                        .addGroup(
-                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                previewPanelLayout
-                                                                                        .createSequentialGroup()
-                                                                                        .addComponent(priceLabel)
-                                                                                        .addPreferredGap(
-                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                Short.MAX_VALUE)
-                                                                                        .addComponent(stockTxt))
-                                                                        .addComponent(descriptionLabel,
-                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                305,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addGap(0, 0, Short.MAX_VALUE)))
-                                .addGap(30, 30, 30)));
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 258,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(nameLabel)
+                                        .addGroup(previewPanelLayout.createSequentialGroup()
+                                                .addComponent(jLabel2)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(amountTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 50,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(50, 50, 50)
+                                                .addComponent(addToCartBtn))
+                                        .addGroup(previewPanelLayout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, previewPanelLayout
+                                                        .createSequentialGroup()
+                                                        .addComponent(priceLabel)
+                                                        .addPreferredGap(
+                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(stockTxt))
+                                                .addComponent(descriptionLabel,
+                                                        javax.swing.GroupLayout.Alignment.LEADING,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 305,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 30, Short.MAX_VALUE)));
         previewPanelLayout.setVerticalGroup(
                 previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(previewPanelLayout.createSequentialGroup()
@@ -449,6 +464,19 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void orderBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_orderBtnActionPerformed
+        // TODO add your handling code here:
+        myOrderForm.setVisible(true);
+    }// GEN-LAST:event_orderBtnActionPerformed
+
+    private void categoryBoxActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_categoryBoxActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_categoryBoxActionPerformed
+
+    private void amountTxtActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_amountTxtActionPerformed
+        // TODO add your handling code here:
+    }// GEN-LAST:event_amountTxtActionPerformed
+
     private void accountBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_accountBtnActionPerformed
         // TODO add your handling code here:
         if (UsersDAO.currentUser == null) {
@@ -473,88 +501,26 @@ public class Home extends javax.swing.JFrame {
             return;
         }
 
-        int id = (int) productTable.getValueAt(selectedRow, 0);
-        String tenMonAn = (String) productTable.getValueAt(selectedRow, 1);
-        String giaString = (String) productTable.getValueAt(selectedRow, 2);
-        double giaThanhMon = convertPriceStringToDouble(giaString);
-        int soLuong = convertStringToInt(amountTxt.getText());
-        int kho = 0;
+        int productId = (int) productTable.getValueAt(selectedRow, 0);
+        int quantity = convertStringToInt(amountTxt.getText());
+        int userId = UsersDAO.currentUser.getUserId();
 
-        String sql = "SELECT stock FROM product WHERE product_id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, id);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    kho = rs.getInt("stock");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm trong kho!", "Lỗi",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi kết nối CSDL: " + e.getMessage(), "Lỗi",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        DefaultTableModel model = (DefaultTableModel) cartForm.getjTable2().getModel();
-
-        // Nếu số lượng ≤ 0 → Xoá sản phẩm khỏi giỏ hàng
-        if (soLuong <= 0) {
-            int rowToDelete = -1;
-            for (int i = 0; i < model.getRowCount(); i++) {
-                String tenSPTrongGio = (String) model.getValueAt(i, 1);
-                if (tenSPTrongGio.equals(tenMonAn)) {
-                    rowToDelete = i;
-                    break;
-                }
-            }
-
-            if (rowToDelete == -1) {
-                JOptionPane.showMessageDialog(this, "Số lượng phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } else {
-                model.removeRow(rowToDelete);
-                updateRowNumbers(model); // Cập nhật lại số thứ tự sau khi xoá
-                JOptionPane.showMessageDialog(this, "Đã xóa sản phẩm khỏi giỏ hàng.");
-            }
-            return;
-        }
-
-        if (soLuong > kho) {
-            JOptionPane.showMessageDialog(this, "Số lượng trong kho không đủ.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        boolean found = false;
-        for (int i = 0; i < model.getRowCount(); i++) {
-            String tenSPTrongGio = (String) model.getValueAt(i, 1);
-            if (tenSPTrongGio.equals(tenMonAn)) {
-                model.setValueAt(soLuong, i, 2); // Cập nhật số lượng
-                JOptionPane.showMessageDialog(this, "Đã cập nhật số lượng trong giỏ hàng.");
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            model.addRow(new Object[] {
-                    model.getRowCount() + 1, // STT
-                    tenMonAn,
-                    soLuong,
-                    giaThanhMon
-            });
-            JOptionPane.showMessageDialog(this, "Đã thêm vào giỏ hàng.");
-        }
+        CartDAO.addToCart(userId, productId, quantity);
+        cartForm.loadCart(userId);
     }
 
-    // Hàm cập nhật lại STT sau khi xoá sản phẩm
-    private void updateRowNumbers(DefaultTableModel model) {
-        for (int i = 0; i < model.getRowCount(); i++) {
-            model.setValueAt(i + 1, i, 0); // Cập nhật lại STT (bắt đầu từ 1)
+    private int convertStringToInt(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return 0; // Trả về 0 nếu chuỗi rỗng hoặc null
         }
-    }// GEN-LAST:event_addToCartBtnActionPerformed
+        try {
+            // Loại bỏ khoảng trắng và chuyển đổi sang số nguyên
+            return Integer.parseInt(text.trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi chuyển đổi số lượng: " + text, "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return 0;
+        }
+    }
 
     private void cartBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cartBtnActionPerformed
         // TODO add your handling code here:
@@ -623,16 +589,4 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel stockTxt;
     // End of variables declaration//GEN-END:variables
 
-    private int convertStringToInt(String text) {
-        if (text == null || text.trim().isEmpty()) {
-            return 0; // Trả về 0 nếu chuỗi rỗng hoặc null
-        }
-        try {
-            // Loại bỏ khoảng trắng và chuyển đổi sang số nguyên
-            return Integer.parseInt(text.trim());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi chuyển đổi số lượng: " + text, "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return 0;
-        }
-    }
 }

@@ -13,7 +13,9 @@ C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\model
 C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\models\Product.java
 C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\models\Users.java
 C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\Admin.java
-C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\Cart.java
+C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\CartView.java
+C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\CheckOut.java
 C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\Home.java
 C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\Login.java
+C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\MyOrder.java
 C:\Users\trong\java-mini-project\src\main\java\com\groupthree\food_project\views\Register.java
