@@ -5,6 +5,7 @@
 package com.groupthree.food_project.models;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  *
@@ -21,6 +22,15 @@ public class Order {
     private int userId;
 
     public Order() {}
+    public Order(String status, String name, String phoneNumber, String address, double totalPrice, Timestamp createdAt, int userId) {
+        this.status = status;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.totalPrice = totalPrice;
+        this.createdAt = createdAt;
+        this.userId = userId;
+    }
 
     public Order(int orderId, String status, String name, String phoneNumber, String address, double totalPrice, Timestamp createdAt, int userId) {
         this.orderId = orderId;
