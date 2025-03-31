@@ -224,7 +224,7 @@ public class MyOrder extends javax.swing.JFrame {
         }
         
         // Chỉ cho phép hủy đơn khi đơn hàng ở trạng thái "pending"
-        if (!"Chờ xác nhận".equals(orderStatus)) { // Kiểm tra nếu không phải trạng thái pending
+        if (!"pending".equals(orderStatus)) { // Kiểm tra nếu không phải trạng thái pending
             javax.swing.JOptionPane.showMessageDialog(this, "Chỉ có thể hủy đơn hàng khi đang chờ xác nhận!", 
                     "Không thể hủy", javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
